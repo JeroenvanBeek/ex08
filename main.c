@@ -57,6 +57,7 @@ int main() {
   printf("\nCreate a new queue:\n");
   createQueue(&queue, data);
   showQueue(&queue);
+  deleteQueue(&queue);
   data.intVal++;
   return 0;
 }
