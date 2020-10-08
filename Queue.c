@@ -22,6 +22,7 @@ void createQueue(queue_t* queue, data_t data)
     newNode->data = data;
     newNode->nextNode = newNode;
   }
+free(newNode);
 }
 
 // Remove all data from a queue:
