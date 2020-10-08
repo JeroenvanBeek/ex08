@@ -52,11 +52,11 @@ int main() {
   printf("\nDelete the current queue:\n");
   deleteQueue(&queue);
   showQueue(&queue);
+ 
   
   printf("\nCreate a new queue:\n");
   createQueue(&queue, data);
   showQueue(&queue);
   data.intVal++;
-  
   return 0;
 }

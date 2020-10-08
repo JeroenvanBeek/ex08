@@ -15,7 +15,7 @@
 void createQueue(queue_t* queue, data_t data) {
   if(queue->lastNode != NULL) deleteQueue(queue);
   
-  node_t* newNode = (node_t*) malloc(sizeof(node_t));
+  node_t* newNode = malloc(sizeof(node_t));
   queue->lastNode = newNode;
   if(newNode != NULL) {
     newNode->data = data;
