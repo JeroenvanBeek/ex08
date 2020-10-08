@@ -12,7 +12,8 @@
 #include <stdlib.h>
 
 // Create a new queue:
-void createQueue(queue_t* queue, data_t data) {
+void createQueue(queue_t* queue, data_t data) 
+{
   if(queue->lastNode != NULL) deleteQueue(queue);
   
   node_t* newNode = malloc(sizeof(node_t));
@@ -22,7 +23,6 @@ void createQueue(queue_t* queue, data_t data) {
     newNode->nextNode = newNode;
   }
 }
-
 
 // Remove all data from a queue:
 int emptyQueue(const queue_t* queue) {
