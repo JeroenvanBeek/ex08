@@ -73,7 +73,7 @@ return 0;
 // SHR using sa_handler:
 void ThreadStop(int sig)
 {
-    printf("\n Stop thread's\n");
+    printf("\n\nStop thread's\n\n");
     killed = 0;
 }
 
