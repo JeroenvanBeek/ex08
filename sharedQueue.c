@@ -45,6 +45,9 @@ int main()
   pthread_create(&ThreadID_A, NULL, ThreadFunction, (void*) &arg_P1);
   pthread_create(&ThreadID_B, NULL, ThreadFunction, (void*) &arg_P2);
 
+  createQueue(&queue, data);
+  showQueue(&queue);
+
   while(killed)
   {
 
@@ -65,7 +68,6 @@ void ThreadStop(int sig)
 
 void *ThreadFunction(void *arg)
 {
-  createQueue(&queue, data);
 
     int *s_arg= (int*) arg;
 
@@ -74,7 +76,7 @@ void *ThreadFunction(void *arg)
     case 1:
     while(killed)
     {
-        data.intVal=1;
+        data.intVal++;
         pushQueue(&queue, data);
         sleep(2);
     }
@@ -82,7 +84,7 @@ void *ThreadFunction(void *arg)
     case 2:
     while(killed)
     {
-        data.intVal=2;
+        data.intVal++;
         pushQueue(&queue, data);
         sleep(3);
 	    showQueue(&queue);
