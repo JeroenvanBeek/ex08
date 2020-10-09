@@ -79,48 +79,46 @@ void ThreadStop(int sig)
 
 void *ThreadFunction(void *arg)
 {
-
     int *s_arg= (int*) arg;
 
     switch(*s_arg)
     {
-    case 1: // writes data to shared queue every 2 seconds
-    while(killed)
-    {
-        sleep(2);
-        data.intVal = 1; // data is different, so it's possible to recognise the producer
-        pushQueue(&queue, data);
-    }
-      break;         // End of thread function
+        case 1: // writes data to shared queue every 2 seconds
+        while(killed)
+        {
+            sleep(2);
+            data.intVal = 1; // data is different, so it's possible to recognise the producer
+            pushQueue(&queue, data);
+        }
+          break;         // End of thread function
 
-    case 2: // writes data to shared queue every 3 seconds
-    while(killed)
-    {
-        sleep(3);
-        data.intVal = 5;// data is different, so it's possible to recognise the producer
-        pushQueue(&queue, data);
-    }
-      break;         // End of thread function
-    
-    case 3: // writes data to shared queue every 4 seconds
-    while(killed)
-    {
-        sleep(4);
-        data.intVal = 9; //data is different, so it's possible to recognise the producer
-        pushQueue(&queue, data); 
-    }
-      break;         // End of thread function
+        case 2: // writes data to shared queue every 3 seconds
+        while(killed)
+        {
+            sleep(3);
+            data.intVal = 5;// data is different, so it's possible to recognise the producer
+            pushQueue(&queue, data);
+        }
+          break;         // End of thread function
+        
+        case 3: // writes data to shared queue every 4 seconds
+        while(killed)
+        {
+            sleep(4);
+            data.intVal = 9; //data is different, so it's possible to recognise the producer
+            pushQueue(&queue, data); 
+        }
+          break;         // End of thread function
 
-    case 4: // read data from shared queue every 15 seconds, print it and empties the queue
-    while(killed)
-    {
-        sleep(15);
-	    showQueue(&queue);
-	    popQueue(&queue);
+        case 4: // read data from shared queue every 15 seconds, print it and empties the queue
+        while(killed)
+        {
+            sleep(15);
+	        showQueue(&queue);
+	        popQueue(&queue);
+        }
+          break;         // End of thread function
     }
-      break;         // End of thread function
-    }
-
 pthread_exit(NULL);
 }
 
