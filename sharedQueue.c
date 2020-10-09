@@ -61,13 +61,23 @@ void lastCycle(int sig)
 
 void *ThreadFunction(void *arg)
 {
+  createQueue(&queue, data);
+  showQueue(&queue);
+
     int *s_arg= (int*) arg;
 
     switch(*s_arg)
     {
-      case 1:
-          printf("hello \n");
-          sleep(2);
+    case 1:
+    while(killed)
+    {
+        data.intVal++;
+        pushQueue(&queue, data);
+        sleep(2);
+	    showQueue(&queue);
+	  
+	    popQueue(&queue);
+    }
       break;         // End of thread function
     }
 pthread_exit(NULL);
