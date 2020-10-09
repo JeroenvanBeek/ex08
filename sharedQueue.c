@@ -8,17 +8,47 @@
 
 #include "Queue.h"
 #include <stdio.h>
+#include <string.h>         // memset
+#include <signal.h>         // sigaction, sigemptyset, struct sigaction, SIGINT, kill()
 #include <stdlib.h>
 #include <pthread.h>
 
 void *ThreadFunction(void *arg);
+void lastCycle(int sig);
+
+int killed = 1;
 
 data_t data = {1, "Hello queue"};
 queue_t queue = {NULL};  // Note: element of queue = NULL
 
 int main() 
 {
+  struct sigaction act, oldact;
   
+  pthread_t ThreadID_A;
+
+  int arg_P1 = 1;
+
+  // Define SHR:
+  memset(&act, '\0', sizeof(act));  // Fill act with NULLs by default
+  act.sa_handler = lastCycle;      // Set the custom SHR
+  act.sa_flags = 0;                 // No flags, used with act.sa_handler
+  sigemptyset(&act.sa_mask);        // No signal masking during SHR execution 
+  
+  // Install SHR:
+  sigaction(SIGINT, &act, &oldact);  // This cannot be SIGKILL or SIGSTOP
+
+}
+
+// SHR using sa_handler:
+void lastCycle(int sig)
+{
+    printf("\n Stop thread's\n");
+    killed = 0;
+}
+
+void *ThreadFunction(void *arg)
+{ 
   printf("\nList the contents of the current queue:\n");
   showQueue(&queue);
   
