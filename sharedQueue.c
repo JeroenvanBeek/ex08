@@ -56,6 +56,8 @@ int main()
   pthread_join(ThreadID_A, NULL);
   pthread_join(ThreadID_B, NULL);
 
+  deleteQueue(&queue);
+
 return 0;
 }
 
@@ -93,7 +95,6 @@ void *ThreadFunction(void *arg)
     }
       break;         // End of thread function
     }
-deleteQueue(&queue);
 pthread_exit(NULL);
 }
 /*  printf("\nList the contents of the current queue:\n");
