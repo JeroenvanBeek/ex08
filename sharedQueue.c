@@ -1,19 +1,23 @@
 /******************************************************************************
- * File:         main.c
- * Version:      1.2
- * Date:         2017-10-18
- * Author:       J. Onokiewicz, M. van der Sluys
- * Description:  OPS exercise 5: Queues
+ * File:         sharedQueue.c
+ * Version:      1.0
+ * Date:         2020-10-9
+ * Author:       J. van Beek
+ * Description:  OPS exercise 8: Queues
  ******************************************************************************/
-
 
 #include "Queue.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 
-int main() {
-  data_t data = {1, "Hello queue"};
-  queue_t queue = {NULL};  // Note: element of queue = NULL
+void *ThreadFunction(void *arg);
+
+data_t data = {1, "Hello queue"};
+queue_t queue = {NULL};  // Note: element of queue = NULL
+
+int main() 
+{
   
   printf("\nList the contents of the current queue:\n");
   showQueue(&queue);
