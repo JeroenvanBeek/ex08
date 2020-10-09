@@ -15,7 +15,7 @@
 #include <pthread.h>
 
 void *ThreadFunction(void *arg);
-void lastCycle(int sig);
+void ThreadStop(int sig);
 
 int killed = 1;
 
@@ -33,7 +33,7 @@ int main()
 
   // Define SHR:
   memset(&act, '\0', sizeof(act));  // Fill act with NULLs by default
-  act.sa_handler = lastCycle;      // Set the custom SHR
+  act.sa_handler = ThreadStop;      // Set the custom SHR
   act.sa_flags = 0;                 // No flags, used with act.sa_handler
   sigemptyset(&act.sa_mask);        // No signal masking during SHR execution 
   
@@ -53,7 +53,7 @@ return 0;
 }
 
 // SHR using sa_handler:
-void lastCycle(int sig)
+void ThreadStop(int sig)
 {
     printf("\n Stop thread's\n");
     killed = 0;
@@ -80,6 +80,7 @@ void *ThreadFunction(void *arg)
     }
       break;         // End of thread function
     }
+deleteQueue(&queue);
 pthread_exit(NULL);
 }
 /*  printf("\nList the contents of the current queue:\n");
