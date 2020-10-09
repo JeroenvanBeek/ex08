@@ -28,8 +28,10 @@ int main()
   struct sigaction act, oldact;
   
   pthread_t ThreadID_A;
+  pthread_t ThreadID_B;
 
   int arg_P1 = 1;
+  int arg_P2 = 2;
 
   // Define SHR:
   memset(&act, '\0', sizeof(act));  // Fill act with NULLs by default
@@ -40,7 +42,8 @@ int main()
   // Install SHR:
   sigaction(SIGINT, &act, &oldact);  // This cannot be SIGKILL or SIGSTOP
 
-  pthread_create(&ThreadID_A,NULL,ThreadFunction, (void*) &arg_P1);
+  pthread_create(&ThreadID_A, NULL, ThreadFunction, (void*) &arg_P1);
+  pthread_create(&ThreadID_B, NULL, ThreadFunction, (void*) &arg_P2);
 
   while(killed)
   {
@@ -48,6 +51,7 @@ int main()
   }
   
   pthread_join(ThreadID_A, NULL);
+  pthread_join(ThreadID_B, NULL);
 
 return 0;
 }
@@ -62,7 +66,6 @@ void ThreadStop(int sig)
 void *ThreadFunction(void *arg)
 {
   createQueue(&queue, data);
-  showQueue(&queue);
 
     int *s_arg= (int*) arg;
 
@@ -71,9 +74,17 @@ void *ThreadFunction(void *arg)
     case 1:
     while(killed)
     {
-        data.intVal++;
+        data.intVal=1;
         pushQueue(&queue, data);
         sleep(2);
+    }
+      break;         // End of thread function
+    case 2:
+    while(killed)
+    {
+        data.intVal=2;
+        pushQueue(&queue, data);
+        sleep(3);
 	    showQueue(&queue);
 	  
 	    popQueue(&queue);
