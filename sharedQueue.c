@@ -78,7 +78,7 @@ void *ThreadFunction(void *arg)
     case 1:
     while(killed)
     {
-        data.intVal++;
+        data.intVal = 1;
         pushQueue(&queue, data);
         sleep(2);
     }
@@ -86,7 +86,7 @@ void *ThreadFunction(void *arg)
     case 2:
     while(killed)
     {
-        data.intVal++;
+        data.intVal = 5;
         pushQueue(&queue, data);
         sleep(3);
 	    showQueue(&queue);
