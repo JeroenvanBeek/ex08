@@ -24,7 +24,7 @@ OBJECTS = ${SOURCES:.c=.o}
 all: printversion ${EXECUTABLE}
 
 $(EXECUTABLE): $(OBJECTS) buildnumber.num
-	$(CXX) $(CXXFLAGS) $(OBJECTS) $(LDXXFLAGS) -o $@
+	$(CXX) $(CXXFLAGS) $(OBJECTS) $(LDXXFLAGS) -o $@ -lpthread
 	@echo "-- Build: " $$(cat buildnumber.num)
 
 # Create dependency file compiler option -MM

@@ -9,6 +9,7 @@
 #include "Queue.h"
 #include <stdio.h>
 #include <string.h>         // memset
+#include <unistd.h>         // sleep() 
 #include <signal.h>         // sigaction, sigemptyset, struct sigaction, SIGINT, kill()
 #include <stdlib.h>
 #include <pthread.h>
@@ -23,6 +24,7 @@ queue_t queue = {NULL};  // Note: element of queue = NULL
 
 int main() 
 {
+
   struct sigaction act, oldact;
   
   pthread_t ThreadID_A;
@@ -38,6 +40,16 @@ int main()
   // Install SHR:
   sigaction(SIGINT, &act, &oldact);  // This cannot be SIGKILL or SIGSTOP
 
+  pthread_create(&ThreadID_A,NULL,ThreadFunction, (void*) &arg_P1);
+
+  while(killed)
+  {
+
+  }
+  
+  pthread_join(ThreadID_A, NULL);
+
+return 0;
 }
 
 // SHR using sa_handler:
@@ -48,8 +60,19 @@ void lastCycle(int sig)
 }
 
 void *ThreadFunction(void *arg)
-{ 
-  printf("\nList the contents of the current queue:\n");
+{
+    int *s_arg= (int*) arg;
+
+    switch(*s_arg)
+    {
+      case 1:
+          printf("hello \n");
+          sleep(2);
+      break;         // End of thread function
+    }
+pthread_exit(NULL);
+}
+/*  printf("\nList the contents of the current queue:\n");
   showQueue(&queue);
   
   printf("\nCreate a new queue:\n");
@@ -94,4 +117,4 @@ void *ThreadFunction(void *arg)
   deleteQueue(&queue);
   data.intVal++;
   return 0;
-}
+}*/ 
