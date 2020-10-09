@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int basic() {
+int main() {
   data_t data = {1, "Hello queue"};
   queue_t queue = {NULL};  // Note: element of queue = NULL
   
