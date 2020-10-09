@@ -27,12 +27,13 @@ int main()
 
   struct sigaction act, oldact;
   
-  pthread_t ThreadID_A;
-  pthread_t ThreadID_B;
+  pthread_t ThreadID_PT1;//producer thread 1 
+  pthread_t ThreadID_PT2;//producer thread 2
+  pthread_t ThreadID_PT3;//producer thread 3
 
   int arg_P1 = 1;
   int arg_P2 = 2;
-
+  int arg_P3 = 3;
   // Define SHR:
   memset(&act, '\0', sizeof(act));  // Fill act with NULLs by default
   act.sa_handler = ThreadStop;      // Set the custom SHR
@@ -42,8 +43,9 @@ int main()
   // Install SHR:
   sigaction(SIGINT, &act, &oldact);  // This cannot be SIGKILL or SIGSTOP
 
-  pthread_create(&ThreadID_A, NULL, ThreadFunction, (void*) &arg_P1);
-  pthread_create(&ThreadID_B, NULL, ThreadFunction, (void*) &arg_P2);
+  pthread_create(&ThreadID_PT1, NULL, ThreadFunction, (void*) &arg_P1);
+  pthread_create(&ThreadID_PT2, NULL, ThreadFunction, (void*) &arg_P2);
+  pthread_create(&ThreadID_PT3, NULL, ThreadFunction, (void*) &arg_P3);
 
   createQueue(&queue, data);
   showQueue(&queue);
@@ -52,9 +54,11 @@ int main()
   {
 
   }
-  
-  pthread_join(ThreadID_A, NULL);
-  pthread_join(ThreadID_B, NULL);
+
+  // Run data for the last time 
+  pthread_join(ThreadID_PT1, NULL);
+  pthread_join(ThreadID_PT2, NULL);
+  pthread_join(ThreadID_PT3, NULL);
 
   deleteQueue(&queue);
 
@@ -78,17 +82,27 @@ void *ThreadFunction(void *arg)
     case 1:
     while(killed)
     {
-        data.intVal = 1;
+        data.intVal = 1; //data is different, so it's possible to recognise the producer
         pushQueue(&queue, data);
         sleep(2);
     }
       break;         // End of thread function
+
     case 2:
     while(killed)
     {
-        data.intVal = 5;
+        data.intVal = 5;//data is different, so it's possible to recognise the producer
         pushQueue(&queue, data);
         sleep(3);
+    }
+      break;         // End of thread function
+    
+    case 3:
+    while(killed)
+    {
+        data.intVal = 9; //data is different, so it's possible to recognise the producer
+        pushQueue(&queue, data);
+        sleep(4);
 	    showQueue(&queue);
 	  
 	    popQueue(&queue);
