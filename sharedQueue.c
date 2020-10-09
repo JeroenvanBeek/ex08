@@ -27,13 +27,16 @@ int main()
 
   struct sigaction act, oldact;
   
-  pthread_t ThreadID_PT1;//producer thread 1 
-  pthread_t ThreadID_PT2;//producer thread 2
-  pthread_t ThreadID_PT3;//producer thread 3
+  pthread_t ThreadID_PT1;// producer thread 1 
+  pthread_t ThreadID_PT2;// producer thread 2
+  pthread_t ThreadID_PT3;// producer thread 3
+  pthread_t ThreadID_CT;// consumer thread
 
   int arg_P1 = 1;
   int arg_P2 = 2;
   int arg_P3 = 3;
+  int arg_P4 = 4;
+
   // Define SHR:
   memset(&act, '\0', sizeof(act));  // Fill act with NULLs by default
   act.sa_handler = ThreadStop;      // Set the custom SHR
@@ -46,6 +49,7 @@ int main()
   pthread_create(&ThreadID_PT1, NULL, ThreadFunction, (void*) &arg_P1);
   pthread_create(&ThreadID_PT2, NULL, ThreadFunction, (void*) &arg_P2);
   pthread_create(&ThreadID_PT3, NULL, ThreadFunction, (void*) &arg_P3);
+  pthread_create(&ThreadID_CT, NULL, ThreadFunction, (void*) &arg_P4);
 
   createQueue(&queue, data);
   showQueue(&queue);
@@ -59,6 +63,7 @@ int main()
   pthread_join(ThreadID_PT1, NULL);
   pthread_join(ThreadID_PT2, NULL);
   pthread_join(ThreadID_PT3, NULL);
+  pthread_join(ThreadID_CT, NULL);
 
   deleteQueue(&queue);
 
@@ -79,81 +84,43 @@ void *ThreadFunction(void *arg)
 
     switch(*s_arg)
     {
-    case 1:
+    case 1: // writes data to shared queue every 2 seconds
     while(killed)
     {
-        data.intVal = 1; //data is different, so it's possible to recognise the producer
-        pushQueue(&queue, data);
         sleep(2);
+        data.intVal = 1; // data is different, so it's possible to recognise the producer
+        pushQueue(&queue, data);
     }
       break;         // End of thread function
 
-    case 2:
+    case 2: // writes data to shared queue every 3 seconds
     while(killed)
     {
-        data.intVal = 5;//data is different, so it's possible to recognise the producer
-        pushQueue(&queue, data);
         sleep(3);
+        data.intVal = 5;// data is different, so it's possible to recognise the producer
+        pushQueue(&queue, data);
     }
       break;         // End of thread function
     
-    case 3:
+    case 3: // writes data to shared queue every 4 seconds
     while(killed)
     {
-        data.intVal = 9; //data is different, so it's possible to recognise the producer
-        pushQueue(&queue, data);
         sleep(4);
+        data.intVal = 9; //data is different, so it's possible to recognise the producer
+        pushQueue(&queue, data); 
+    }
+      break;         // End of thread function
+
+    case 4: // read data from shared queue every 15 seconds, print it and empties the queue
+    while(killed)
+    {
+        sleep(15);
 	    showQueue(&queue);
-	  
 	    popQueue(&queue);
     }
       break;         // End of thread function
     }
+
 pthread_exit(NULL);
 }
-/*  printf("\nList the contents of the current queue:\n");
-  showQueue(&queue);
-  
-  printf("\nCreate a new queue:\n");
-  createQueue(&queue, data);
-  showQueue(&queue);
-  data.intVal++;
-  
-  
-  
-  printf("\nAdd new data to the queue:\n");
-  pushQueue(&queue, data);
-  showQueue(&queue);
-  data.intVal++;
-  
-  printf("\nAdd new data to the queue:\n");
-  pushQueue(&queue, data);
-  showQueue(&queue);
-  data.intVal++;
-  
-  printf("\nAdd new data to the queue:\n");
-  pushQueue(&queue, data);
-  showQueue(&queue);
-  
-  printf("\nRemove data from the queue:\n");
-  popQueue(&queue);
-  showQueue(&queue);
-  
-  
-  
-  printf("\nFront iValue/first node: %d\n", frontQueue(&queue)->intVal);
-  printf("Back  iValue/last node:  %d\n", backQueue(&queue)->intVal);
-  
-  
-  printf("\nDelete the current queue:\n");
-  deleteQueue(&queue);
-  showQueue(&queue);
- 
-  
-  printf("\nCreate a new queue:\n");
-  createQueue(&queue, data);
-  showQueue(&queue);
-  deleteQueue(&queue);
-  data.intVal++;
-  return 0;
-}*/ 
+
